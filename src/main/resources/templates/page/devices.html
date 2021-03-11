@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>卡片列表</title>
+    <link rel="stylesheet" th:href="@{/static/assets/libs/layui/css/layui.css}"/>
+    <link rel="stylesheet" th:href="@{/static/assets/module/admin.css?v=318}"/>
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <style>
+        /** 项目列表样式 */
+        .project-list-item {
+            background-color: #fff;
+            border: 1px solid #e8e8e8;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all .2s;
+        }
+
+        .project-list-item:hover {
+            box-shadow: 0 2px 10px rgba(0, 0, 0, .15);
+        }
+
+        .project-list-item .project-list-item-cover {
+            width: 100%;
+            height: 220px;
+            display: block;
+            border-top-left-radius: 4px;
+            border-top-right-radius: 4px;
+        }
+
+        .project-list-item-body {
+            padding: 20px;
+        }
+
+        .project-list-item .project-list-item-body > h2 {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 12px;
+        }
+
+        .project-list-item .project-list-item-text {
+            /*height: 44px;*/
+            overflow: hidden;
+            margin-bottom: 12px;
+        }
+
+        .project-list-item .project-list-item-desc {
+            position: relative;
+        }
+
+        .project-list-item .project-list-item-desc .time {
+            color: #999;
+            font-size: 12px;
+        }
+
+        .project-list-item .project-list-item-desc .ew-head-list {
+            position: absolute;
+            right: 0;
+            top: 0;
+        }
+
+        .ew-head-list .ew-head-list-item {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            border: 1px solid #fff;
+            margin-left: -10px;
+        }
+
+        .ew-head-list .ew-head-list-item:first-child {
+            margin-left: 0;
+        }
+
+        /** // 项目列表样式结束 */
+
+        /** 应用列表样式 */
+        .application-list-item {
+            background-color: #fff;
+            border: 1px solid #e8e8e8;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all .2s;
+        }
+
+        .application-list-item:hover {
+            box-shadow: 0 2px 10px rgba(0, 0, 0, .15);
+        }
+
+        .application-list-item .application-list-item-header {
+            padding: 16px 12px 0 12px;
+        }
+
+        .application-list-item .application-list-item-header .head {
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .application-list-item .application-list-item-header > h2 {
+            color: #333;
+            font-size: 18px;
+            display: inline-block;
+        }
+
+        .application-list-item .application-list-item-body {
+            padding: 12px 12px 12px 50px;
+            font-size: 0;
+        }
+
+        .application-list-item .application-list-item-body .text-num-item {
+            display: inline-block;
+            width: 50%;
+            font-size: 26px;
+            color: #666;
+        }
+
+        .application-list-item .application-list-item-body .text-num-item .text-num-item-title {
+            font-size: 12px;
+            color: #999;
+            margin-bottom: 10px;
+        }
+
+        .application-list-item .application-list-item-body .text-num-item small {
+            font-size: 16px;
+        }
+
+        .application-list-item .application-list-item-tool {
+            font-size: 0;
+            background-color: #FAFAFA;
+            border-top: 1px solid #e8e8e8;
+            padding: 10px 0 5px 0;
+            border-bottom-left-radius: 4px;
+            border-bottom-right-radius: 4px;
+        }
+
+        .application-list-item .application-list-item-tool .application-list-item-tool-item {
+            display: inline-block;
+            width: 25%;
+            font-size: 18px;
+            text-align: center;
+            color: #999;
+            border-right: 1px solid #e8e8e8;
+            box-sizing: border-box;
+            cursor: pointer;
+        }
+
+        .application-list-item .application-list-item-tool .application-list-item-tool-item:last-child {
+            border-right: none;
+        }
+
+        /** // 应用列表样式结束 */
+
+        /** 文章列表样式 */
+        .article-list-item {
+            border-bottom: 1px solid #e8e8e8;
+            margin-top: 16px;
+            position: relative;
+        }
+
+        .article-list-item > h2 {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 12px;
+        }
+
+        .article-list-item > .layui-badge-rim {
+            position: absolute;
+            right: 0;
+            top: 0;
+        }
+
+        .article-list-item .layui-badge-list .layui-badge {
+            padding-top: 0;
+            padding-bottom: 0;
+        }
+
+        .article-list-item .article-list-item-text {
+            margin-bottom: 12px;
+        }
+
+        .article-list-item .article-list-item-desc {
+            margin-bottom: 12px;
+        }
+
+        .article-list-item .article-list-item-desc .head {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+        }
+
+        .article-list-item .article-list-item-desc > * {
+            vertical-align: middle;
+        }
+
+        .article-list-item .article-list-item-tool {
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .article-list-item .article-list-item-tool .article-list-item-tool-item {
+            border-right: 1px solid #e8e8e8;
+            padding: 0 15px;
+            cursor: pointer;
+        }
+
+        .article-list-item .article-list-item-tool .article-list-item-tool-item:first-child {
+            padding-left: 0;
+        }
+
+        .article-list-item .article-list-item-tool .article-list-item-tool-item:last-child {
+            border-right: none;
+            padding-right: 0;
+        }
+
+        .article-list-item .article-list-item-tool .article-list-item-tool-item > * {
+            vertical-align: middle;
+        }
+
+        .article-list-item .article-list-item-tool .article-list-item-tool-item.star-active {
+            color: #01AAED;
+        }
+
+        .article-list-item .article-list-item-tool .article-list-item-tool-item.star-active .layui-icon-rate:before {
+            content: "\e67a";
+        }
+        .price{font-size:14px}
+        .price b{margin-right:20px}
+        .price p{display:inline-block}
+        .price span{margin-left: 20px}
+
+
+    </style>
+</head>
+<body>
+
+<!-- 正文开始 -->
+<div class="layui-fluid">
+
+        <div class="layui-row layui-col-space30" >
+            <div th:each="item:${data}" class="layui-col-md2 layui-col-xs3">
+                <div class="project-list-item" th:id="'device'+${item.id}" th:onclick="selectLick([[${item}]]);">
+                    <img class="project-list-item-cover" src="/static/assets/images/head.jpg"/>
+                    <div class="project-list-item-body">
+                        <span class="layui-badge-dot layui-bg-green" th:if="${item.state} eq 'ONLINE'">
+                        </span>
+                        <span class="layui-badge-dot" th:if="${item.state} ne 'ONLINE'">
+                        </span>
+                        <h2 style="text-align:center" th:text="${item.name}"></h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+</div>
+
+<!-- js部分 -->
+<script type="text/javascript" th:src="@{/static/assets/libs/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/static/assets/js/common.js?v=318}"></script>
+<script>
+    var loadindex;
+    var layer;
+    var $
+    /*
+    * 手机点击事件
+    * */
+    function selectLick(item){
+        if (item.state === 'ONLINE'){
+            var index = layer.open({
+                type: 2,
+                content: '/device?id='+item.id,
+                area: ['893px', '700px'],
+                offset: 'auto',
+                //maxmin: true ,//是否允许最大最小化
+                closeBtn: 1,//关闭样式
+                cancel: function(index1, layero){
+                    layer.confirm('真的吗？', function(index2){
+                        $.ajax({
+                            url: "/api/close?id="+item.id+"&username="+item.device,
+                            type: 'post',
+                            dataType: 'json',
+                            timeout: 2000,
+                            data:'',
+                            success: function (data) {
+                                //TODO 确认关闭后的回调操作
+                                layer.close(index2);
+                                layer.close(index1);
+                            }
+                        })
+                    });
+                    return false;
+                }
+            });
+        }else {
+            layer.msg("该设备没有准备就绪，请通知管理员")
+        }
+        layer.full(index);
+    }
+
+    layui.use(['layer','form', 'dataGrid', 'element', 'dropdown','laypage'], function () {
+
+        $ = layui.jquery;
+        layer = layui.layer;
+        var dataGrid = layui.dataGrid;
+        var form = layui.form;
+
+
+        $.ajax({
+            url: "/api/devices",
+            type: 'post',
+            dataType: 'json',
+            timeout: 2000,
+            data:'',
+            beforeSend: function(){
+                loadindex = layer.load();
+            },
+            success: function (data) {
+                layer.close(loadindex);
+
+            }
+        })
+
+
+
+
+        /*form.on('submit(userTbSearch)', function (data) {
+            var name=$('#name_id').val();
+            var loadindex_2
+            $.ajax({
+                url: "/api/productcard",
+                type: 'post',
+                dataType: 'json',
+                timeout: 2000,
+                data:{'name':name},
+                beforeSend: function(){
+                    loadindex_2 = layer.load();
+                },
+                success: function (data) {
+                    layer.close(loadindex_2);
+                    dataGrid.render({
+                        elem: '#demoCardList1',
+                        templet: '#demoCardItem1',
+                        id:'dataGridid',
+                        data: data.data,
+                        page: {limit: 12, limits: [12, 24, 48, 72]}
+                    });
+                }
+            })
+            return false;
+        });
+
+        dataGrid.on('item(demoCardList1)', function (obj) {
+            layer.msg('点击了第' + (obj.index + 1) + '个');
+        });
+
+        /!** 应用 *!/
+        $.get('/static/json/data-grid3.json', function (res) {
+            dataGrid.render({
+                elem: '#demoCardList2',
+                templet: '#demoCardItem2',
+                data: res.data,
+                page: {limit: 8, limits: [8, 16, 24, 32, 40]}
+            });
+        });
+
+        dataGrid.on('tool(demoCardList2)', function (obj) {
+            if (obj.event === 'download') {
+                layer.msg('点击了下载');
+            } else if (obj.event === 'edit') {
+                layer.msg('编辑');
+            } else if (obj.event === 'share') {
+                layer.msg('点击了分享');
+            } else if (obj.event === 'item1') {
+                layer.msg('点击了1st menu item');
+            } else if (obj.event === 'item2') {
+                layer.msg('点击了2nd menu item');
+            } else if (obj.event === 'item3') {
+                layer.msg('点击了3rd menu item');
+            }
+        });
+
+        dataGrid.on('item(demoCardList2)', function (obj) {
+            layer.msg('点击了第' + (obj.index + 1) + '个');
+        });
+
+        /!** 文章 *!/
+        dataGrid.render({
+            elem: '#demoCardList3',
+            templet: '#demoCardItem3',
+            data: '/static/json/data-grid1.json',
+            loadMore: {limit: 5}
+        });
+
+        dataGrid.on('tool(demoCardList3)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'star') {
+                data.isStar = !data.isStar;
+                data.isStar ? data.star++ : data.star--;
+                obj.update(data);
+            } else if (obj.event === 'like') {
+                data.isLike = !data.isLike;
+                data.isLike ? data.like++ : data.like--;
+                obj.update(data);
+            } else if (obj.event === 'comment') {
+                layer.msg('点击了评论');
+            }
+        });*/
+    });
+</script>
+</body>
+</html>

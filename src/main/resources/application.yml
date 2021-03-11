@@ -1,0 +1,28 @@
+spring:
+  freemarker:
+    cache: false
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/scrcpy_test?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC
+    username: tester
+    password: tester
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5Dialect
+    database: mysql
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    generate-ddl: true
+  mvc:
+    static-path-pattern: /**
+    throw-exception-if-no-handler-found: true
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: UTC
+  thymeleaf:
+    prefix: classpath:/templates/
+    cache: false
+  resources:
+    static-locations: classpath:/,classpath:/public,classpath:/resources,classpath:/META-INF/resources
+server:
+  port: 80
